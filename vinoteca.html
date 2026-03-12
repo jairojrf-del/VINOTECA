@@ -121,6 +121,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .photo-preview{max-width:120px;max-height:120px;border-radius:8px;border:1px solid var(--glass-border);margin-top:6px;display:block}
 .pulse{animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+.backup-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:10px;border:none;font-family:'Josefin Sans',sans-serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:8px}
+.backup-export{background:linear-gradient(135deg,var(--gold),#a07830);color:var(--noir);font-weight:600}
+.backup-export:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(201,168,76,.3)}
+.backup-import{background:var(--glass);border:1px solid var(--glass-border);color:var(--text)}
+.backup-import:hover{border-color:var(--gold)}
+.backup-danger{background:rgba(200,50,50,.15);border:1px solid rgba(200,50,50,.3);color:#e87070}
+.backup-info{background:rgba(201,168,76,.08);border:1px dashed rgba(201,168,76,.3);border-radius:8px;padding:12px 14px;font-size:.82rem;color:var(--text-dim);margin-bottom:12px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -143,6 +151,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <button class="nav-tab" id="ntab-sommelier" onclick="switchTab('sommelier',this)"><span class="icon">🤵</span>Sommelier</button>
     <button class="nav-tab" id="ntab-historial" onclick="switchTab('historial',this)"><span class="icon">📖</span>Historial</button>
     <button class="nav-tab" id="ntab-estadisticas" onclick="switchTab('estadisticas',this)"><span class="icon">📊</span>Stats</button>
+    <button class="nav-tab" id="ntab-backup" onclick="switchTab('backup',this)"><span class="icon">💾</span>Backup</button>
   </div>
   <div class="section active" id="tab-bodega">
     <p class="section-title">🏛 Mi Vinoteca</p>
@@ -155,7 +164,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <div class="chat-messages" id="chatMessages"></div>
       <div class="chat-input-area">
         <button class="photo-btn" title="Foto de etiqueta" onclick="triggerPhoto()">📷</button>
-        <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event)">
+        <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(event)">
         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Consulta o foto de etiqueta..." onkeydown="chatKey(event)"></textarea>
         <button class="send-btn" onclick="sendMsg()">&#9658;</button>
       </div>
@@ -170,6 +179,18 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div id="statsContainer"></div>
   </div>
 </div>
+<div class="section" id="tab-backup">
+    <p class="section-title">💾 Copia de Seguridad</p>
+    <div class="backup-info">
+      Exporta tus datos a un archivo .json que puedes guardar en tu móvil, Google Drive o enviarte por WhatsApp. Para restaurar, importa ese mismo archivo.
+    </div>
+    <button class="backup-btn backup-export" onclick="exportData()">⬇️ Exportar mis datos</button>
+    <button class="backup-btn backup-import" onclick="document.getElementById('importFile').click()">⬆️ Importar copia de seguridad</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+    <div class="divider"></div>
+    <p style="font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Zona de peligro</p>
+    <button class="backup-btn backup-danger" onclick="resetAll()">🗑️ Borrar todos los datos</button>
+  </div>
 <div class="modal-overlay" id="modalOverlay" onclick="bgClose(event)">
   <div class="modal"><div class="modal-handle"></div><div id="modalContent"></div></div>
 </div>
@@ -558,6 +579,46 @@ function openAddFromPhoto(slot,detStr){
     '<button class="btn btn-primary" onclick="saveWine(\''+ slot +'\')" >Confirmar y Guardar en Bodega</button>'+
     '<button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>'
   );
+}
+
+
+function exportData(){
+  var data={wines:S.wines,history:S.history,exportDate:new Date().toISOString(),version:'1'};
+  var json=JSON.stringify(data,null,2);
+  var blob=new Blob([json],{type:'application/json'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='vinoteca_backup_'+new Date().toISOString().substring(0,10)+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert('Backup exportado correctamente. Guardalo en un lugar seguro.');
+}
+
+function importData(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      var data=JSON.parse(ev.target.result);
+      if(!data.wines||!data.history){alert('Archivo no valido.');return;}
+      if(!confirm('Esto reemplazara todos tus datos actuales. Continuar?'))return;
+      S.wines=data.wines||[];
+      S.history=data.history||[];
+      save();render();
+      alert('Datos importados correctamente. Tienes '+S.wines.length+' botellas y '+S.history.length+' catas.');
+    }catch(err){alert('Error al leer el archivo. Asegurate de que es un backup valido.');}
+  };
+  reader.readAsText(file);
+  e.target.value='';
+}
+
+function resetAll(){
+  if(!confirm('ATENCION: Esto borrara TODOS tus vinos, historial y datos. Esta accion no se puede deshacer.'))return;
+  if(!confirm('Seguro? Se perderan todos los datos permanentemente.'))return;
+  S={wines:[],history:[],chat:[]};
+  save();render();initChat();
+  alert('Todos los datos han sido borrados.');
 }
 
 render();
