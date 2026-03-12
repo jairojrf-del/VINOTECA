@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#1a0a00">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Vinoteca Teka</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500&family=Josefin+Sans:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{--noir:#0d0500;--bordeaux:#2c0a0a;--merlot:#5c1a1a;--gold:#c9a84c;--cream:#f5efe0;--text:#d4c4a0;--text-dim:#8a7a60;--glass:rgba(201,168,76,0.08);--glass-border:rgba(201,168,76,0.2)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--noir);color:var(--text);font-family:'Cormorant Garamond',serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(92,26,26,.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(201,168,76,.05) 0%,transparent 50%);pointer-events:none;z-index:0}
+#app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding-bottom:80px}
+.header{padding:32px 24px 20px;border-bottom:1px solid var(--glass-border);background:linear-gradient(to bottom,rgba(44,10,10,.6),transparent)}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between}
+.logo-area h1{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--gold);letter-spacing:.02em;line-height:1}
+.logo-area p{font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.25em;color:var(--text-dim);text-transform:uppercase;margin-top:4px}
+.header-stats{display:flex;gap:16px;margin-top:20px}
+.stat-pill{flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:10px 12px;text-align:center}
+.stat-pill .val{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);display:block}
+.stat-pill .lbl{font-family:'Josefin Sans',sans-serif;font-size:.58rem;letter-spacing:.15em;color:var(--text-dim);text-transform:uppercase;display:block;margin-top:2px}
+.alerts-section{margin:16px 16px 0}
+.alert-card{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-left:3px solid var(--gold);border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:.85rem;display:flex;align-items:center;gap:10px}
+.alert-card.urgent{background:rgba(200,50,50,.1);border-color:rgba(200,50,50,.4);border-left-color:#c83232}
+.nav-tabs{display:flex;margin:20px 16px 0;background:rgba(255,255,255,.03);border-radius:12px;padding:4px;border:1px solid var(--glass-border)}
+.nav-tab{flex:1;padding:8px 4px;border-radius:9px;border:none;background:transparent;color:var(--text-dim);font-family:'Josefin Sans',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav-tab .icon{font-size:1.1rem}
+.nav-tab.active{background:var(--glass);color:var(--gold);border:1px solid var(--glass-border)}
+.section{display:none;padding:16px}
+.section.active{display:block}
+.section-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);margin-bottom:16px}
+.shelf{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;margin-bottom:12px;overflow:hidden}
+.shelf-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--glass-border);background:rgba(201,168,76,.05)}
+.shelf-name{font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.shelf-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--glass-border)}
+.slot{background:var(--noir);padding:12px 8px;cursor:pointer;transition:all .2s;min-height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative}
+.slot:hover{background:rgba(201,168,76,.06)}
+.slot.occupied{background:rgba(92,26,26,.4)}
+.slot.occupied:hover{background:rgba(92,26,26,.6)}
+.slot .wine-icon{font-size:1.5rem;margin-bottom:4px}
+.slot .wine-name{font-size:.68rem;color:var(--cream);line-height:1.2;font-weight:500}
+.slot .wine-year{font-size:.6rem;color:var(--gold);margin-top:2px;font-family:'Josefin Sans',sans-serif}
+.slot .wine-type-badge{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%}
+.slot.empty .empty-lbl{font-family:'Josefin Sans',sans-serif;font-size:.55rem;letter-spacing:.1em;color:var(--text-dim);text-transform:uppercase}
+.slot.empty .plus{font-size:1.2rem;color:var(--text-dim);margin-bottom:2px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{width:100%;max-width:480px;margin:0 auto;background:#1a0800;border:1px solid var(--glass-border);border-bottom:none;border-radius:20px 20px 0 0;padding:24px;transform:translateY(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);max-height:90vh;overflow-y:auto}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;background:var(--glass-border);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gold);margin-bottom:6px}
+.modal-subtitle{font-size:.85rem;color:var(--text-dim);margin-bottom:20px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;padding:10px 12px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:.95rem;outline:none;transition:border-color .2s}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold)}
+.form-group select option{background:#1a0800}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;padding:14px;border-radius:10px;border:none;font-family:'Josefin Sans',sans-serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:8px}
+.btn-primary{background:linear-gradient(135deg,var(--gold),#a07830);color:var(--noir);font-weight:600}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(201,168,76,.3)}
+.btn-secondary{background:var(--glass);border:1px solid var(--glass-border);color:var(--text)}
+.btn-danger{background:rgba(200,50,50,.15);border:1px solid rgba(200,50,50,.3);color:#e87070}
+.chat-container{display:flex;flex-direction:column;height:calc(100vh - 220px)}
+.chat-messages{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:12px}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--glass-border);border-radius:2px}
+.msg{max-width:88%;padding:12px 16px;border-radius:16px;font-size:.9rem;line-height:1.55;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{background:linear-gradient(135deg,rgba(201,168,76,.2),rgba(201,168,76,.1));border:1px solid rgba(201,168,76,.25);align-self:flex-end;border-bottom-right-radius:4px;color:var(--cream)}
+.msg.assistant{background:rgba(92,26,26,.3);border:1px solid rgba(92,26,26,.5);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.assistant .msg-label{font-family:'Josefin Sans',sans-serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
+.dots{display:inline-flex;gap:4px;align-items:center;height:16px}
+.dots span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:bounce 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.chat-input-area{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--glass-border);margin-top:8px;align-items:flex-end}
+.chat-input{flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:10px 14px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:.95rem;outline:none;resize:none;max-height:100px}
+.chat-input:focus{border-color:var(--gold)}
+.send-btn,.photo-btn{width:44px;height:44px;border-radius:12px;border:none;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.send-btn{background:linear-gradient(135deg,var(--gold),#a07830);color:var(--noir)}
+.send-btn:hover{transform:scale(1.05)}
+.photo-btn{background:var(--glass);border:1px solid var(--glass-border);color:var(--text)}
+.photo-btn:hover{border-color:var(--gold)}
+.quick-prompts{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;margin-bottom:8px}
+.quick-prompts::-webkit-scrollbar{display:none}
+.qp-btn{white-space:nowrap;padding:5px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;color:var(--text);font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.1em;cursor:pointer;transition:all .2s}
+.qp-btn:hover{border-color:var(--gold);color:var(--gold)}
+.history-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer}
+.history-score{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;flex-shrink:0}
+.score-5{background:rgba(201,168,76,.2);color:var(--gold);border:1px solid rgba(201,168,76,.4)}
+.score-4{background:rgba(100,180,100,.15);color:#7cc87c;border:1px solid rgba(100,180,100,.3)}
+.score-3{background:rgba(100,140,200,.15);color:#7aa0d4;border:1px solid rgba(100,140,200,.3)}
+.score-2{background:rgba(200,150,50,.15);color:#d4a050;border:1px solid rgba(200,150,50,.3)}
+.score-1,.score-0{background:rgba(200,80,80,.15);color:#c87070;border:1px solid rgba(200,80,80,.3)}
+.history-info{flex:1}
+.history-info h4{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--cream)}
+.history-info p{font-size:.75rem;color:var(--text-dim);margin-top:2px}
+.history-price{font-family:'Josefin Sans',sans-serif;font-size:.7rem;color:var(--gold);text-align:right}
+.wine-detail-img{font-size:4rem;text-align:center;margin:10px 0 16px}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.detail-item{background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;padding:8px 10px}
+.detail-item .dk{font-family:'Josefin Sans',sans-serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:2px}
+.detail-item .dv{font-size:.85rem;color:var(--cream)}
+.guard-bar{height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin-top:8px;margin-bottom:4px}
+.guard-fill{height:100%;border-radius:3px;background:linear-gradient(to right,var(--merlot),var(--gold))}
+.rating-row{display:flex;gap:8px;margin:10px 0}
+.star-btn{width:36px;height:36px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;color:var(--text-dim);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.star-btn.sel{background:rgba(201,168,76,.2);border-color:var(--gold);color:var(--gold)}
+.type-tinto{background:#8b1a1a}
+.type-blanco{background:#c8b04a}
+.type-rosado{background:#c84a7a}
+.type-cava{background:#4a8ab4}
+.type-generoso{background:#8a4a14}
+.ai-add-note{background:rgba(201,168,76,.08);border:1px dashed rgba(201,168,76,.3);border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text-dim);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.divider{height:1px;background:var(--glass-border);margin:16px 0}
+.photo-preview{max-width:120px;max-height:120px;border-radius:8px;border:1px solid var(--glass-border);margin-top:6px;display:block}
+.pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-area">
+        <h1>🍷 Teka</h1>
+        <p>Sommelier &middot; Vinoteca Personal</p>
+      </div>
+      <div style="text-align:right;padding-top:4px">
+        <div style="font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.15em;color:var(--text-dim);text-transform:uppercase">5 Estantes &middot; 15 Huecos</div>
+      </div>
+    </div>
+    <div class="header-stats" id="headerStats"></div>
+  </div>
+  <div class="alerts-section" id="alertsSection"></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="ntab-bodega" onclick="switchTab('bodega',this)"><span class="icon">🏛</span>Bodega</button>
+    <button class="nav-tab" id="ntab-sommelier" onclick="switchTab('sommelier',this)"><span class="icon">🤵</span>Sommelier</button>
+    <button class="nav-tab" id="ntab-historial" onclick="switchTab('historial',this)"><span class="icon">📖</span>Historial</button>
+    <button class="nav-tab" id="ntab-estadisticas" onclick="switchTab('estadisticas',this)"><span class="icon">📊</span>Stats</button>
+  </div>
+  <div class="section active" id="tab-bodega">
+    <p class="section-title">🏛 Mi Vinoteca</p>
+    <div id="shelvesContainer"></div>
+  </div>
+  <div class="section" id="tab-sommelier">
+    <p class="section-title">🤵 Sommelier IA</p>
+    <div class="chat-container">
+      <div class="quick-prompts" id="quickPrompts"></div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-area">
+        <button class="photo-btn" title="Foto de etiqueta" onclick="triggerPhoto()">📷</button>
+        <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(event)">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Consulta o foto de etiqueta..." onkeydown="chatKey(event)"></textarea>
+        <button class="send-btn" onclick="sendMsg()">&#9658;</button>
+      </div>
+    </div>
+  </div>
+  <div class="section" id="tab-historial">
+    <p class="section-title">📖 Historial de Catas</p>
+    <div id="historialContainer"></div>
+  </div>
+  <div class="section" id="tab-estadisticas">
+    <p class="section-title">📊 Estadísticas</p>
+    <div id="statsContainer"></div>
+  </div>
+</div>
+<div class="modal-overlay" id="modalOverlay" onclick="bgClose(event)">
+  <div class="modal"><div class="modal-handle"></div><div id="modalContent"></div></div>
+</div>
+<script>
+var SK='vinoteka_teka_v3';
+var TIPOS={
+  tinto:   {e:'🍷',l:'Tinto',        c:'type-tinto'},
+  blanco:  {e:'🥂',l:'Blanco',       c:'type-blanco'},
+  rosado:  {e:'🌸',l:'Rosado',       c:'type-rosado'},
+  cava:    {e:'✨',    l:'Cava/Espumoso',c:'type-cava'},
+  generoso:{e:'🌾',l:'Generoso/Dulce',c:'type-generoso'}
+};
+var CY=new Date().getFullYear();
+
+var S=(function(){
+  try{var v=localStorage.getItem(SK);if(v)return JSON.parse(v);}catch(e){}
+  return {wines:[],history:[],chat:[]};
+})();
+
+function save(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}}
+
+function slotWine(s,h){return S.wines.find(function(w){return w.slot===s+'-'+h;});}
+function freeSlot(){for(var s=0;s<5;s++)for(var h=0;h<3;h++)if(!slotWine(s,h))return s+'-'+h;return null;}
+function totalVal(){return S.wines.reduce(function(a,w){return a+(parseFloat(w.precio)||0);},0);}
+function guardaSt(w){
+  if(!w.guarda_fin)return null;
+  if(CY>w.guarda_fin)return 'expired';
+  if(CY>=w.guarda_fin-1)return 'urgent';
+  if(!w.guarda_inicio||CY>=w.guarda_inicio)return 'optimal';
+  return 'early';
+}
+
+function render(){renderHeader();renderAlerts();renderShelves();renderHistorial();renderStats();}
+
+function renderHeader(){
+  var f=15-S.wines.length;
+  document.getElementById('headerStats').innerHTML=
+    '<div class="stat-pill"><span class="val">'+S.wines.length+'</span><span class="lbl">Botellas</span></div>'+
+    '<div class="stat-pill"><span class="val">'+f+'</span><span class="lbl">Vacios</span></div>'+
+    '<div class="stat-pill"><span class="val">'+totalVal().toFixed(0)+'\u20AC</span><span class="lbl">Valor</span></div>'+
+    '<div class="stat-pill"><span class="val">'+S.history.length+'</span><span class="lbl">Catas</span></div>';
+}
+
+function renderAlerts(){
+  var html='';
+  S.wines.forEach(function(w){
+    var st=guardaSt(w);
+    if(st==='expired')html+='<div class="alert-card urgent"><span class="pulse">\u26A0</span><span><b>'+w.name+' '+w.anada+'</b> - Ha superado su ventana (hasta '+w.guarda_fin+'). Consumir ya!</span></div>';
+    else if(st==='urgent')html+='<div class="alert-card"><span>\u26A0</span><span><b>'+w.name+' '+w.anada+'</b> - Fin de guarda en '+w.guarda_fin+'. Momento ideal.</span></div>';
+  });
+  if(S.wines.length===15)html+='<div class="alert-card"><span>!</span><span>Vinoteca <b>llena</b>. Consume o retira una botella.</span></div>';
+  document.getElementById('alertsSection').innerHTML=html;
+}
+
+function renderShelves(){
+  var html='';
+  for(var s=4;s>=0;s--){
+    var filled=[0,1,2].filter(function(h){return slotWine(s,h);}).length;
+    html+='<div class="shelf"><div class="shelf-header"><span class="shelf-name">Estante '+(s+1)+'</span><span style="font-size:.7rem;color:var(--text-dim)">'+filled+'/3</span></div><div class="shelf-slots">';
+    for(var h=0;h<3;h++){
+      var w=slotWine(s,h);
+      if(w){
+        var t=TIPOS[w.tipo]||TIPOS.tinto;
+        var st=guardaSt(w);
+        var si=st==='expired'?'\u26A0':st==='urgent'?'\u26A0':st==='optimal'?'\u2705':'';
+        html+='<div class="slot occupied" onclick="openDetail(\''+ w.id +'\')" ><div class="wine-type-badge '+t.c+'"></div><span class="wine-icon">'+t.e+'</span><span class="wine-name">'+esc(w.name)+'</span><span class="wine-year">'+(w.anada||'-')+' '+si+'</span></div>';
+      }else{
+        html+='<div class="slot empty" onclick="openAdd(\''+ s+'-'+h +'\')" ><span class="plus">+</span><span class="empty-lbl">Vacio</span></div>';
+      }
+    }
+    html+='</div></div>';
+  }
+  document.getElementById('shelvesContainer').innerHTML=html;
+}
+
+function renderHistorial(){
+  var c=document.getElementById('historialContainer');
+  if(!S.history.length){c.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--text-dim)"><div style="font-size:3rem">📖</div><p style="margin-top:12px">Aun no hay catas registradas.</p></div>';return;}
+  var sorted=S.history.slice().sort(function(a,b){return new Date(b.fecha)-new Date(a.fecha);});
+  c.innerHTML=sorted.map(function(h){
+    var t=TIPOS[h.tipo]||TIPOS.tinto;
+    var rcp=h.precio?'RCP: '+(h.nota/(h.precio/10)).toFixed(1):'';
+    return '<div class="history-card" onclick="openHistDetail(\''+ h.id +'\')" >'+
+      '<div class="history-score score-'+h.nota+'">'+h.nota+'</div>'+
+      '<div class="history-info"><h4>'+t.e+' '+esc(h.name)+'</h4>'+
+      '<p>'+(h.bodega||'')+' - '+(h.anada||'')+' - '+(h.fecha?h.fecha.substring(0,10):'')+'</p>'+
+      (h.notas_cata?'<p style="margin-top:4px;font-style:italic;font-size:.72rem">"'+esc(h.notas_cata)+'"</p>':'')+
+      '</div><div class="history-price">'+(h.precio?h.precio+'\u20AC':'')+'<br><span style="font-size:.6rem;color:var(--text-dim)">'+rcp+'</span></div></div>';
+  }).join('');
+}
+
+function renderStats(){
+  var c=document.getElementById('statsContainer');
+  var tc={};S.wines.forEach(function(w){tc[w.tipo]=(tc[w.tipo]||0)+1;});
+  var avg=S.history.length?(S.history.reduce(function(s,h){return s+h.nota;},0)/S.history.length).toFixed(1):'-';
+  var topR=S.history.slice().sort(function(a,b){return b.nota-a.nota;}).slice(0,3);
+  var bRcp=S.history.filter(function(h){return h.precio;}).sort(function(a,b){return(b.nota/(b.precio/10))-(a.nota/(a.precio/10));}).slice(0,3);
+  var html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">'+
+    '<div class="detail-item" style="grid-column:span 2"><span class="dk">Valor total de la cava</span><span class="dv" style="font-size:1.5rem;font-family:\'Playfair Display\',serif;color:var(--gold)">'+totalVal().toFixed(2)+'\u20AC</span></div>'+
+    '<div class="detail-item"><span class="dk">Nota media</span><span class="dv" style="font-size:1.3rem;color:var(--gold)">'+avg+'/5</span></div>'+
+    '<div class="detail-item"><span class="dk">Catas</span><span class="dv" style="font-size:1.3rem">'+S.history.length+'</span></div>'+
+    '</div><p style="font-family:\'Playfair Display\',serif;color:var(--gold);font-size:1rem;margin-bottom:10px">Por Tipo</p>';
+  Object.entries(TIPOS).forEach(function(e){
+    var k=e[0],v=e[1];var n=tc[k]||0;if(!n)return;
+    var pct=S.wines.length?Math.round(n/S.wines.length*100):0;
+    html+='<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:4px"><span>'+v.e+' '+v.l+'</span><span style="color:var(--gold)">'+n+' ('+pct+'%)</span></div><div class="guard-bar"><div class="guard-fill" style="width:'+pct+'%"></div></div></div>';
+  });
+  if(topR.length){
+    html+='<div class="divider"></div><p style="font-family:\'Playfair Display\',serif;color:var(--gold);font-size:1rem;margin-bottom:10px">Mejor Valorados</p>';
+    topR.forEach(function(h){var t=TIPOS[h.tipo]||TIPOS.tinto;html+='<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:.85rem">'+t.e+' '+esc(h.name)+' '+(h.anada||'')+'</span><span style="color:var(--gold)">'+h.nota+'/5</span></div>';});
+  }
+  if(bRcp.length){
+    html+='<div class="divider"></div><p style="font-family:\'Playfair Display\',serif;color:var(--gold);font-size:1rem;margin-bottom:10px">Mejor RCP</p>';
+    bRcp.forEach(function(h){var t=TIPOS[h.tipo]||TIPOS.tinto;html+='<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--glass-border)"><span style="font-size:.85rem">'+t.e+' '+esc(h.name)+'</span><span style="color:var(--gold);font-size:.75rem">'+h.nota+'/5 - '+h.precio+'\u20AC</span></div>';});
+  }
+  c.innerHTML=html;
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function openModal(html){document.getElementById('modalContent').innerHTML=html;document.getElementById('modalOverlay').classList.add('open');}
+function closeModal(){document.getElementById('modalOverlay').classList.remove('open');selRating=null;}
+function bgClose(e){if(e.target===document.getElementById('modalOverlay'))closeModal();}
+
+function tipoOpts(sel){
+  var o='';
+  Object.entries(TIPOS).forEach(function(e){o+='<option value="'+e[0]+'"'+(sel===e[0]?' selected':'')+'>'+e[1].e+' '+e[1].l+'</option>';});
+  return o;
+}
+
+function openAdd(slot){
+  if(!slot){slot=freeSlot();if(!slot){alert('Vinoteca llena.');return;}}
+  var p=slot.split('-');var s=parseInt(p[0]);var h=parseInt(p[1]);
+  openModal(
+    '<p class="modal-title">Anadir Botella</p>'+
+    '<p class="modal-subtitle">Estante '+(s+1)+', Hueco '+(h+1)+'</p>'+
+    '<div class="ai-add-note">📷 Tambien puedes ir al Sommelier y subir una foto de la etiqueta.</div>'+
+    '<div class="form-group"><label>Nombre *</label><input type="text" id="fn" placeholder="Ej: Ribera del Duero Reserva"></div>'+
+    '<div class="form-group"><label>Bodega</label><input type="text" id="fb" placeholder="Ej: Vega Sicilia"></div>'+
+    '<div class="form-row"><div class="form-group"><label>Anada</label><input type="number" id="fa" placeholder="2019"></div>'+
+    '<div class="form-group"><label>Precio (EUR)</label><input type="number" id="fp" placeholder="15.90" step="0.01"></div></div>'+
+    '<div class="form-group"><label>Tipo</label><select id="ft">'+tipoOpts('')+'</select></div>'+
+    '<div class="form-row"><div class="form-group"><label>Region / D.O.</label><input type="text" id="fr" placeholder="Ribera del Duero"></div>'+
+    '<div class="form-group"><label>Uva(s)</label><input type="text" id="fu" placeholder="Tempranillo"></div></div>'+
+    '<div class="form-row"><div class="form-group"><label>Guarda desde</label><input type="number" id="fgi" placeholder="'+CY+'"></div>'+
+    '<div class="form-group"><label>Guarda hasta</label><input type="number" id="fgf" placeholder="'+(CY+5)+'"></div></div>'+
+    '<div class="form-group"><label>Notas</label><textarea id="fno" rows="2" placeholder="Notas personales..."></textarea></div>'+
+    '<button class="btn btn-primary" onclick="saveWine(\''+ slot +'\')" >Guardar en Bodega</button>'+
+    '<button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>'
+  );
+}
+
+function saveWine(slot){
+  var name=document.getElementById('fn').value.trim();if(!name){alert('El nombre es obligatorio.');return;}
+  S.wines.push({id:Date.now().toString(),slot:slot,name:name,bodega:document.getElementById('fb').value.trim(),anada:document.getElementById('fa').value,precio:document.getElementById('fp').value,tipo:document.getElementById('ft').value,region:document.getElementById('fr').value.trim(),uva:document.getElementById('fu').value.trim(),guarda_inicio:parseInt(document.getElementById('fgi').value)||null,guarda_fin:parseInt(document.getElementById('fgf').value)||null,notas:document.getElementById('fno').value.trim(),fechaEntrada:new Date().toISOString()});
+  save();closeModal();render();
+}
+
+var selRating=null;
+function pickRating(n){selRating=n;for(var i=0;i<=5;i++){var b=document.getElementById('rb'+i);if(b)b.classList.toggle('sel',i<=n);}}
+
+function openDetail(wid){
+  var w=S.wines.find(function(x){return x.id===wid;});if(!w)return;
+  var t=TIPOS[w.tipo]||TIPOS.tinto;
+  var p=w.slot.split('-');var s=parseInt(p[0]);var h=parseInt(p[1]);
+  var st=guardaSt(w);
+  var stMsg={expired:'Fuera de ventana de consumo',urgent:'Fin de guarda proximo - momento ideal',optimal:'En ventana optima de consumo',early:'Aun en periodo de guarda'};
+  var pct=w.guarda_inicio&&w.guarda_fin?Math.min(100,Math.max(0,((CY-w.guarda_inicio)/(w.guarda_fin-w.guarda_inicio))*100)):50;
+  var ratingBtns='';for(var i=0;i<=5;i++)ratingBtns+='<button class="star-btn" id="rb'+i+'" onclick="pickRating('+i+')">'+i+'</button>';
+  openModal(
+    '<div class="wine-detail-img">'+t.e+'</div>'+
+    '<p class="modal-title">'+esc(w.name)+'</p>'+
+    '<p class="modal-subtitle">'+(w.bodega?esc(w.bodega)+' - ':'')+( w.anada?w.anada+' - ':'')+'Estante '+(s+1)+', Hueco '+(h+1)+'</p>'+
+    '<div class="detail-grid">'+
+    '<div class="detail-item"><span class="dk">Tipo</span><span class="dv">'+t.l+'</span></div>'+
+    '<div class="detail-item"><span class="dk">Precio</span><span class="dv">'+(w.precio?w.precio+'\u20AC':'-')+'</span></div>'+
+    '<div class="detail-item"><span class="dk">Region</span><span class="dv">'+(w.region||'-')+'</span></div>'+
+    '<div class="detail-item"><span class="dk">Uva</span><span class="dv">'+(w.uva||'-')+'</span></div>'+
+    '</div>'+
+    (w.guarda_fin?'<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--text-dim);margin-bottom:4px"><span>Ventana de guarda</span><span style="color:var(--gold)">'+(w.guarda_inicio||'?')+' - '+w.guarda_fin+'</span></div><div class="guard-bar"><div class="guard-fill" style="width:'+pct+'%"></div></div><div style="font-size:.75rem;margin-top:6px">'+(stMsg[st]||'')+'</div></div>':'')+
+    (w.notas?'<p style="font-style:italic;font-size:.85rem;color:var(--text-dim);margin-bottom:16px">'+esc(w.notas)+'</p>':'')+
+    '<div class="divider"></div>'+
+    '<p style="font-size:.75rem;color:var(--text-dim);margin-bottom:10px">Valoracion (0-5):</p>'+
+    '<div class="rating-row">'+ratingBtns+'</div>'+
+    '<div class="form-group" style="margin-top:10px"><label>Notas de cata</label><textarea id="cataN" rows="2" placeholder="Taninos, acidez..."></textarea></div>'+
+    '<button class="btn btn-primary" onclick="consumeWine(\''+ w.id +'\')" >Consumida - Mover a Historial</button>'+
+    '<button class="btn btn-secondary" onclick="openEdit(\''+ w.id +'\')" >Editar</button>'+
+    '<button class="btn btn-danger" onclick="delWine(\''+ w.id +'\')" >Eliminar de la bodega</button>'
+  );
+}
+
+function consumeWine(wid){
+  var w=S.wines.find(function(x){return x.id===wid;});if(!w)return;
+  if(selRating===null){alert('Selecciona una valoracion 0-5.');return;}
+  var nc=(document.getElementById('cataN')||{}).value||'';
+  S.history.push({id:Date.now().toString(),name:w.name,bodega:w.bodega,anada:w.anada,tipo:w.tipo,region:w.region,uva:w.uva,precio:w.precio,nota:selRating,notas_cata:nc,fecha:new Date().toISOString()});
+  S.wines=S.wines.filter(function(x){return x.id!==wid;});
+  save();closeModal();render();
+}
+
+function delWine(wid){if(!confirm('Eliminar esta botella?'))return;S.wines=S.wines.filter(function(x){return x.id!==wid;});save();closeModal();render();}
+
+function openEdit(wid){
+  var w=S.wines.find(function(x){return x.id===wid;});if(!w)return;
+  var p=w.slot.split('-');var s=parseInt(p[0]);var h=parseInt(p[1]);
+  openModal(
+    '<p class="modal-title">Editar Botella</p>'+
+    '<p class="modal-subtitle">Estante '+(s+1)+', Hueco '+(h+1)+'</p>'+
+    '<div class="form-group"><label>Nombre *</label><input type="text" id="fn" value="'+esc(w.name)+'"></div>'+
+    '<div class="form-group"><label>Bodega</label><input type="text" id="fb" value="'+esc(w.bodega||'')+'"></div>'+
+    '<div class="form-row"><div class="form-group"><label>Anada</label><input type="number" id="fa" value="'+(w.anada||'')+'"></div>'+
+    '<div class="form-group"><label>Precio (EUR)</label><input type="number" id="fp" value="'+(w.precio||'')+'" step="0.01"></div></div>'+
+    '<div class="form-group"><label>Tipo</label><select id="ft">'+tipoOpts(w.tipo)+'</select></div>'+
+    '<div class="form-row"><div class="form-group"><label>Region / D.O.</label><input type="text" id="fr" value="'+esc(w.region||'')+'"></div>'+
+    '<div class="form-group"><label>Uva(s)</label><input type="text" id="fu" value="'+esc(w.uva||'')+'"></div></div>'+
+    '<div class="form-row"><div class="form-group"><label>Guarda desde</label><input type="number" id="fgi" value="'+(w.guarda_inicio||'')+'"></div>'+
+    '<div class="form-group"><label>Guarda hasta</label><input type="number" id="fgf" value="'+(w.guarda_fin||'')+'"></div></div>'+
+    '<div class="form-group"><label>Notas</label><textarea id="fno" rows="2">'+esc(w.notas||'')+'</textarea></div>'+
+    '<button class="btn btn-primary" onclick="updateWine(\''+ w.id +'\')" >Guardar Cambios</button>'+
+    '<button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>'
+  );
+}
+
+function updateWine(wid){
+  var w=S.wines.find(function(x){return x.id===wid;});if(!w)return;
+  var name=document.getElementById('fn').value.trim();if(!name){alert('Nombre obligatorio.');return;}
+  Object.assign(w,{name:name,bodega:document.getElementById('fb').value.trim(),anada:document.getElementById('fa').value,precio:document.getElementById('fp').value,tipo:document.getElementById('ft').value,region:document.getElementById('fr').value.trim(),uva:document.getElementById('fu').value.trim(),guarda_inicio:parseInt(document.getElementById('fgi').value)||null,guarda_fin:parseInt(document.getElementById('fgf').value)||null,notas:document.getElementById('fno').value.trim()});
+  save();closeModal();render();
+}
+
+function openHistDetail(hid){
+  var h=S.history.find(function(x){return x.id===hid;});if(!h)return;
+  var t=TIPOS[h.tipo]||TIPOS.tinto;
+  openModal(
+    '<div class="wine-detail-img">'+t.e+'</div>'+
+    '<p class="modal-title">'+esc(h.name)+'</p>'+
+    '<p class="modal-subtitle">'+(h.bodega?esc(h.bodega)+' - ':'')+( h.anada?h.anada:'')+'</p>'+
+    '<div class="detail-grid">'+
+    '<div class="detail-item"><span class="dk">Nota</span><span class="dv" style="font-size:1.4rem;color:var(--gold)">'+h.nota+'/5</span></div>'+
+    '<div class="detail-item"><span class="dk">Precio</span><span class="dv">'+(h.precio?h.precio+'\u20AC':'-')+'</span></div>'+
+    '<div class="detail-item"><span class="dk">Fecha</span><span class="dv">'+(h.fecha?h.fecha.substring(0,10):'-')+'</span></div>'+
+    '<div class="detail-item"><span class="dk">RCP</span><span class="dv">'+(h.precio?(h.nota/(h.precio/10)).toFixed(2):'-')+'</span></div>'+
+    '</div>'+
+    (h.notas_cata?'<p style="font-style:italic;font-size:.9rem;color:var(--text-dim);margin:8px 0">'+esc(h.notas_cata)+'</p>':'')+
+    '<button class="btn btn-danger" style="margin-top:16px" onclick="delHistory(\''+ h.id +'\')" >Eliminar del historial</button>'+
+    '<button class="btn btn-secondary" onclick="closeModal()">Cerrar</button>'
+  );
+}
+
+function delHistory(hid){if(!confirm('Eliminar este registro?'))return;S.history=S.history.filter(function(x){return x.id!==hid;});save();closeModal();render();}
+
+function switchTab(tab,btn){
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('tab-'+tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+// CHAT
+var QP=['Que bebo hoy?','Recomendame compras','Cual abrir ya?','Maridaje con carne','Maridaje con pescado','Vino para regalo','Temperatura de servicio','Analiza mi coleccion'];
+
+function initChat(){
+  document.getElementById('quickPrompts').innerHTML=QP.map(function(p){return '<button class="qp-btn" onclick="qpSend(this.textContent)">'+p+'</button>';}).join('');
+  if(!S.chat.length){
+    document.getElementById('chatMessages').innerHTML='<div class="msg assistant"><span class="msg-label">Sommelier Teka</span>Bienvenido a su vinoteca personal. Soy su sommelier virtual. Puedo identificar vinos por foto de etiqueta, sugerir maridajes y asesorarle en compras. En que puedo servirle?</div>';
+  }else{renderChat();}
+}
+
+function renderChat(){
+  var msgs=document.getElementById('chatMessages');
+  msgs.innerHTML=S.chat.map(function(m){
+    return m.role==='user'
+      ?'<div class="msg user">'+esc(m.content)+'</div>'
+      :'<div class="msg assistant"><span class="msg-label">Sommelier Teka</span>'+m.content.replace(/\n/g,'<br>')+'</div>';
+  }).join('');
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function qpSend(t){document.getElementById('chatInput').value=t;sendMsg();}
+function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
+
+function buildCtx(){
+  var inv=S.wines.length
+    ?'INVENTARIO ('+S.wines.length+' botellas):\n'+S.wines.map(function(w){var p=w.slot.split('-');return '- '+w.name+' '+(w.anada||'')+' ('+( w.bodega||'')+') | '+(TIPOS[w.tipo]?TIPOS[w.tipo].l:w.tipo)+' | '+(w.region||'')+' | '+(w.precio||'?')+'EUR | Guarda:'+(w.guarda_inicio||'?')+'-'+(w.guarda_fin||'?')+' | Estado:'+(guardaSt(w)||'?')+' | Estante '+(parseInt(p[0])+1)+' Hueco '+(parseInt(p[1])+1);}).join('\n')
+    :'INVENTARIO: Vinoteca vacia.';
+  var hist=S.history.length
+    ?'\nCATAS ('+S.history.length+'):\n'+S.history.map(function(h){return '- '+h.name+' '+(h.anada||'')+' | Nota:'+h.nota+'/5 | '+(h.precio||'?')+'EUR | RCP:'+(h.precio?(h.nota/(h.precio/10)).toFixed(2):'?')+' | '+(h.notas_cata||'');}).join('\n')
+    :'\nCATAS: Sin catas aun.';
+  return inv+hist;
+}
+
+function addLoader(msgs){
+  var d=document.createElement('div');d.className='msg assistant';
+  d.innerHTML='<span class="msg-label">Sommelier Teka</span><span class="dots"><span></span><span></span><span></span></span>';
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;
+}
+
+function addAssistMsg(msgs,text){
+  var d=document.createElement('div');d.className='msg assistant';
+  d.innerHTML='<span class="msg-label">Sommelier Teka</span>'+text.replace(/\n/g,'<br>');
+  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
+}
+
+async function sendMsg(){
+  var input=document.getElementById('chatInput');
+  var text=input.value.trim();if(!text)return;
+  input.value='';
+  var msgs=document.getElementById('chatMessages');
+  var ud=document.createElement('div');ud.className='msg user';ud.textContent=text;msgs.appendChild(ud);
+  var ld=addLoader(msgs);
+  S.chat.push({role:'user',content:text});
+  var sys='Eres un sommelier experto de la vinoteca Teka. Estilo culto y cercano.\n\n'+buildCtx()+'\n\nMenciona siempre la posicion exacta del vino. Indica temperatura y decantacion. Alerta vinos al final de guarda. Responde en espanol.';
+  try{
+    var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:S.chat.map(function(m){return{role:m.role,content:m.content};})})});
+    var d=await r.json();
+    var reply=d.content?d.content.map(function(c){return c.text||'';}).join(''):'Sin respuesta.';
+    ld.remove();addAssistMsg(msgs,reply);S.chat.push({role:'assistant',content:reply});
+    if(S.chat.length>20)S.chat=S.chat.slice(-20);
+    save();
+  }catch(err){ld.innerHTML='<span class="msg-label">Sommelier Teka</span>Error de conexion.';}
+}
+
+// FOTO ETIQUETA
+var imgB64=null,imgMime=null;
+function triggerPhoto(){document.getElementById('photoInput').click();}
+
+function handlePhoto(e){
+  var file=e.target.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    imgB64=ev.target.result.split(',')[1];imgMime=file.type||'image/jpeg';
+    var msgs=document.getElementById('chatMessages');
+    var pd=document.createElement('div');pd.className='msg user';
+    pd.innerHTML='<img src="'+ev.target.result+'" class="photo-preview"><br><small style="color:var(--text-dim);font-size:.75rem">Analizando etiqueta...</small>';
+    msgs.appendChild(pd);msgs.scrollTop=msgs.scrollHeight;
+    analyzeLabel();
+  };
+  reader.readAsDataURL(file);e.target.value='';
+}
+
+async function analyzeLabel(){
+  var msgs=document.getElementById('chatMessages');
+  var ld=addLoader(msgs);
+  var fs=freeSlot();
+  var slotTxt=fs?'Primer hueco libre: Estante '+(parseInt(fs.split('-')[0])+1)+', Hueco '+(parseInt(fs.split('-')[1])+1)+'.':'Vinoteca llena.';
+  var sys='Eres un sommelier experto. Identifica el vino de la etiqueta y responde SIEMPRE con este formato exacto:\nNOMBRE: [nombre completo]\nBODEGA: [nombre]\nANADA: [anno o Sin anada]\nTIPO: [tinto/blanco/rosado/cava/generoso]\nUVA: [variedades]\nREGION: [denominacion]\nPRECIO: [numero en euros sin simbolo]\nGUARDA_INI: [anno inicio]\nGUARDA_FIN: [anno fin]\nCONSEJO: [temperatura y decantacion en una frase]\nDESCRIPCION: [2-3 frases sobre el vino]\n\n'+slotTxt+'\n\nResponde en espanol.';
+  try{
+    var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:imgMime,data:imgB64}},{type:'text',text:'Identifica este vino.'}]}]})});
+    var d=await r.json();
+    var reply=d.content?d.content.map(function(c){return c.text||'';}).join(''):'No pude identificar el vino.';
+    ld.remove();
+    var get=function(key){var m=reply.match(new RegExp(key+':\\s*(.+)'));return m?m[1].trim():'';};
+    var det={name:get('NOMBRE'),bodega:get('BODEGA'),anada:get('ANADA'),tipo:get('TIPO').toLowerCase(),uva:get('UVA'),region:get('REGION'),precio:get('PRECIO'),gi:get('GUARDA_INI'),gf:get('GUARDA_FIN')};
+    var d2=document.createElement('div');d2.className='msg assistant';
+    var prettyReply=reply.replace(/\n/g,'<br>');
+    var btnHtml='';
+    if(fs){
+      var slotLbl='Estante '+(parseInt(fs.split('-')[0])+1)+', Hueco '+(parseInt(fs.split('-')[1])+1);
+      var ds=encodeURIComponent(JSON.stringify(det));
+      btnHtml='<button class="btn btn-primary" style="margin-top:10px;font-size:.65rem" onclick="openAddFromPhoto(\''+ fs +'\',decodeURIComponent(\''+ ds +'\'))">Anadir a '+slotLbl+'</button>';
+    }
+    d2.innerHTML='<span class="msg-label">Sommelier Teka</span>'+prettyReply+btnHtml;
+    msgs.appendChild(d2);msgs.scrollTop=msgs.scrollHeight;
+    S.chat.push({role:'assistant',content:reply});save();
+    imgB64=null;imgMime=null;
+  }catch(err){ld.innerHTML='<span class="msg-label">Sommelier Teka</span>Error al analizar la imagen.';imgB64=null;}
+}
+
+function openAddFromPhoto(slot,detStr){
+  var det=JSON.parse(detStr);
+  var p=slot.split('-');var s=parseInt(p[0]);var h=parseInt(p[1]);
+  openModal(
+    '<p class="modal-title">Anadir Botella</p>'+
+    '<p class="modal-subtitle">Identificado por IA - Estante '+(s+1)+', Hueco '+(h+1)+'</p>'+
+    '<div class="ai-add-note">Datos extraidos automaticamente. Revisa y corrige si es necesario.</div>'+
+    '<div class="form-group"><label>Nombre *</label><input type="text" id="fn" value="'+esc(det.name||'')+'"></div>'+
+    '<div class="form-group"><label>Bodega</label><input type="text" id="fb" value="'+esc(det.bodega||'')+'"></div>'+
+    '<div class="form-row"><div class="form-group"><label>Anada</label><input type="number" id="fa" value="'+esc(det.anada||'')+'"></div>'+
+    '<div class="form-group"><label>Precio (EUR)</label><input type="number" id="fp" value="'+esc(det.precio||'')+'" step="0.01"></div></div>'+
+    '<div class="form-group"><label>Tipo</label><select id="ft">'+tipoOpts(det.tipo||'tinto')+'</select></div>'+
+    '<div class="form-row"><div class="form-group"><label>Region / D.O.</label><input type="text" id="fr" value="'+esc(det.region||'')+'"></div>'+
+    '<div class="form-group"><label>Uva(s)</label><input type="text" id="fu" value="'+esc(det.uva||'')+'"></div></div>'+
+    '<div class="form-row"><div class="form-group"><label>Guarda desde</label><input type="number" id="fgi" value="'+esc(det.gi||'')+'"></div>'+
+    '<div class="form-group"><label>Guarda hasta</label><input type="number" id="fgf" value="'+esc(det.gf||'')+'"></div></div>'+
+    '<div class="form-group"><label>Notas</label><textarea id="fno" rows="2" placeholder="Notas personales..."></textarea></div>'+
+    '<button class="btn btn-primary" onclick="saveWine(\''+ slot +'\')" >Confirmar y Guardar en Bodega</button>'+
+    '<button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>'
+  );
+}
+
+render();
+initChat();
+</script>
+</body>
+</html>
