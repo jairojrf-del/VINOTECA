@@ -26,8 +26,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .alert-card{background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);border-left:3px solid var(--gold);border-radius:8px;padding:10px 14px;margin-bottom:8px;font-size:.85rem;display:flex;align-items:center;gap:10px}
 .alert-card.urgent{background:rgba(200,50,50,.1);border-color:rgba(200,50,50,.4);border-left-color:#c83232}
 .nav-tabs{display:flex;margin:20px 16px 0;background:rgba(255,255,255,.03);border-radius:12px;padding:4px;border:1px solid var(--glass-border)}
-.nav-tab{flex:1;padding:8px 4px;border-radius:9px;border:none;background:transparent;color:var(--text-dim);font-family:'Josefin Sans',sans-serif;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px}
-.nav-tab .icon{font-size:1.1rem}
+.nav-tab{flex:1;padding:8px 2px;border-radius:9px;border:none;background:transparent;color:var(--text-dim);font-family:'Josefin Sans',sans-serif;font-size:.5rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav-tab .icon{font-size:1rem}
 .nav-tab.active{background:var(--glass);color:var(--gold);border:1px solid var(--glass-border)}
 .section{display:none;padding:16px}
 .section.active{display:block}
@@ -64,32 +64,6 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(201,168,76,.3)}
 .btn-secondary{background:var(--glass);border:1px solid var(--glass-border);color:var(--text)}
 .btn-danger{background:rgba(200,50,50,.15);border:1px solid rgba(200,50,50,.3);color:#e87070}
-.chat-container{display:flex;flex-direction:column;height:calc(100vh - 220px)}
-.chat-messages{flex:1;overflow-y:auto;padding:8px 0;display:flex;flex-direction:column;gap:12px}
-.chat-messages::-webkit-scrollbar{width:3px}
-.chat-messages::-webkit-scrollbar-thumb{background:var(--glass-border);border-radius:2px}
-.msg{max-width:88%;padding:12px 16px;border-radius:16px;font-size:.9rem;line-height:1.55;animation:msgIn .3s ease}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg.user{background:linear-gradient(135deg,rgba(201,168,76,.2),rgba(201,168,76,.1));border:1px solid rgba(201,168,76,.25);align-self:flex-end;border-bottom-right-radius:4px;color:var(--cream)}
-.msg.assistant{background:rgba(92,26,26,.3);border:1px solid rgba(92,26,26,.5);align-self:flex-start;border-bottom-left-radius:4px}
-.msg.assistant .msg-label{font-family:'Josefin Sans',sans-serif;font-size:.55rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
-.dots{display:inline-flex;gap:4px;align-items:center;height:16px}
-.dots span{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:bounce 1.2s infinite}
-.dots span:nth-child(2){animation-delay:.2s}
-.dots span:nth-child(3){animation-delay:.4s}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
-.chat-input-area{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--glass-border);margin-top:8px;align-items:flex-end}
-.chat-input{flex:1;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:10px 14px;color:var(--cream);font-family:'Cormorant Garamond',serif;font-size:.95rem;outline:none;resize:none;max-height:100px}
-.chat-input:focus{border-color:var(--gold)}
-.send-btn,.photo-btn{width:44px;height:44px;border-radius:12px;border:none;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
-.send-btn{background:linear-gradient(135deg,var(--gold),#a07830);color:var(--noir)}
-.send-btn:hover{transform:scale(1.05)}
-.photo-btn{background:var(--glass);border:1px solid var(--glass-border);color:var(--text)}
-.photo-btn:hover{border-color:var(--gold)}
-.quick-prompts{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;margin-bottom:8px}
-.quick-prompts::-webkit-scrollbar{display:none}
-.qp-btn{white-space:nowrap;padding:5px 12px;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;color:var(--text);font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.1em;cursor:pointer;transition:all .2s}
-.qp-btn:hover{border-color:var(--gold);color:var(--gold)}
 .history-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;cursor:pointer}
 .history-score{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;flex-shrink:0}
 .score-5{background:rgba(201,168,76,.2);color:var(--gold);border:1px solid rgba(201,168,76,.4)}
@@ -111,24 +85,28 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .rating-row{display:flex;gap:8px;margin:10px 0}
 .star-btn{width:36px;height:36px;background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;color:var(--text-dim);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .star-btn.sel{background:rgba(201,168,76,.2);border-color:var(--gold);color:var(--gold)}
-.type-tinto{background:#8b1a1a}
-.type-blanco{background:#c8b04a}
-.type-rosado{background:#c84a7a}
-.type-cava{background:#4a8ab4}
-.type-generoso{background:#8a4a14}
-.ai-add-note{background:rgba(201,168,76,.08);border:1px dashed rgba(201,168,76,.3);border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text-dim);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.type-tinto{background:#8b1a1a}.type-blanco{background:#c8b04a}.type-rosado{background:#c84a7a}.type-cava{background:#4a8ab4}.type-generoso{background:#8a4a14}
+.ai-add-note{background:rgba(201,168,76,.08);border:1px dashed rgba(201,168,76,.3);border-radius:8px;padding:10px 12px;font-size:.8rem;color:var(--text-dim);margin-bottom:14px}
 .divider{height:1px;background:var(--glass-border);margin:16px 0}
 .photo-preview{max-width:120px;max-height:120px;border-radius:8px;border:1px solid var(--glass-border);margin-top:6px;display:block}
 .pulse{animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+/* BACKUP */
+.backup-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:14px;padding:20px;margin-bottom:12px}
+.backup-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);margin-bottom:6px}
+.backup-card p{font-size:.85rem;color:var(--text-dim);line-height:1.6;margin-bottom:14px}
+.backup-btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* PHOTO SCAN */
+.scan-area{border:2px dashed var(--glass-border);border-radius:14px;padding:30px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:16px}
+.scan-area:hover{border-color:var(--gold);background:var(--glass)}
+.scan-area .scan-icon{font-size:2.5rem;margin-bottom:8px}
+.scan-area p{font-size:.85rem;color:var(--text-dim)}
+.scan-result{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:16px;margin-top:16px}
+.scan-result h4{font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:10px}
 
-.backup-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px;border-radius:10px;border:none;font-family:'Josefin Sans',sans-serif;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:8px}
-.backup-export{background:linear-gradient(135deg,var(--gold),#a07830);color:var(--noir);font-weight:600}
-.backup-export:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(201,168,76,.3)}
-.backup-import{background:var(--glass);border:1px solid var(--glass-border);color:var(--text)}
-.backup-import:hover{border-color:var(--gold)}
-.backup-danger{background:rgba(200,50,50,.15);border:1px solid rgba(200,50,50,.3);color:#e87070}
-.backup-info{background:rgba(201,168,76,.08);border:1px dashed rgba(201,168,76,.3);border-radius:8px;padding:12px 14px;font-size:.82rem;color:var(--text-dim);margin-bottom:12px;line-height:1.6}
+.ia-modal-box{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:14px;margin-bottom:12px}
+.ia-text{width:100%;min-height:200px;background:rgba(0,0,0,.3);border:1px solid var(--glass-border);border-radius:8px;padding:12px;color:var(--cream);font-family:'Josefin Sans',sans-serif;font-size:.7rem;line-height:1.7;resize:none;outline:none}
+.copy-feedback{text-align:center;color:var(--gold);font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.15em;margin-top:8px;height:20px;transition:opacity .3s}
 </style>
 </head>
 <body>
@@ -137,81 +115,89 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="header-top">
       <div class="logo-area">
         <h1>🍷 Teka</h1>
-        <p>Sommelier &middot; Vinoteca Personal</p>
+        <p>Sommelier · Vinoteca Personal</p>
       </div>
       <div style="text-align:right;padding-top:4px">
-        <div style="font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.15em;color:var(--text-dim);text-transform:uppercase">5 Estantes &middot; 15 Huecos</div>
+        <div style="font-family:'Josefin Sans',sans-serif;font-size:.6rem;letter-spacing:.15em;color:var(--text-dim);text-transform:uppercase">5 Estantes · 15 Huecos</div>
       </div>
     </div>
     <div class="header-stats" id="headerStats"></div>
+    <button onclick="openIA()" style="margin-top:12px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--glass-border);background:var(--glass);color:var(--gold);font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">🤖 Exportar para IA</button>
   </div>
   <div class="alerts-section" id="alertsSection"></div>
   <div class="nav-tabs">
     <button class="nav-tab active" id="ntab-bodega" onclick="switchTab('bodega',this)"><span class="icon">🏛</span>Bodega</button>
-    <button class="nav-tab" id="ntab-sommelier" onclick="switchTab('sommelier',this)"><span class="icon">🤵</span>Sommelier</button>
     <button class="nav-tab" id="ntab-historial" onclick="switchTab('historial',this)"><span class="icon">📖</span>Historial</button>
     <button class="nav-tab" id="ntab-estadisticas" onclick="switchTab('estadisticas',this)"><span class="icon">📊</span>Stats</button>
     <button class="nav-tab" id="ntab-backup" onclick="switchTab('backup',this)"><span class="icon">💾</span>Backup</button>
   </div>
+
+  <!-- BODEGA -->
   <div class="section active" id="tab-bodega">
     <p class="section-title">🏛 Mi Vinoteca</p>
     <div id="shelvesContainer"></div>
   </div>
-  <div class="section" id="tab-sommelier">
-    <p class="section-title">🤵 Sommelier IA</p>
-    <div class="chat-container">
-      <div class="quick-prompts" id="quickPrompts"></div>
-      <div class="chat-messages" id="chatMessages"></div>
-      <div class="chat-input-area">
-        <button class="photo-btn" title="Foto de etiqueta" onclick="triggerPhoto()">📷</button>
-        <input type="file" id="photoInput" accept="image/*" style="display:none" onchange="handlePhoto(event)">
-        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Consulta o foto de etiqueta..." onkeydown="chatKey(event)"></textarea>
-        <button class="send-btn" onclick="sendMsg()">&#9658;</button>
-      </div>
-    </div>
-  </div>
+
+  <!-- HISTORIAL -->
   <div class="section" id="tab-historial">
     <p class="section-title">📖 Historial de Catas</p>
     <div id="historialContainer"></div>
   </div>
+
+  <!-- ESTADISTICAS -->
   <div class="section" id="tab-estadisticas">
     <p class="section-title">📊 Estadísticas</p>
     <div id="statsContainer"></div>
   </div>
-</div>
-<div class="section" id="tab-backup">
+
+  <!-- BACKUP -->
+  <div class="section" id="tab-backup">
     <p class="section-title">💾 Copia de Seguridad</p>
-    <div class="backup-info">
-      Exporta tus datos a un archivo .json que puedes guardar en tu móvil, Google Drive o enviarte por WhatsApp. Para restaurar, importa ese mismo archivo.
+
+    <div class="backup-card">
+      <h3>⬇️ Exportar datos</h3>
+      <p>Descarga un archivo con todos tus vinos e historial de catas. Guardalo en Google Drive, WhatsApp o donde quieras.</p>
+      <button class="btn btn-primary" onclick="exportData()">Exportar ahora</button>
     </div>
-    <button class="backup-btn backup-export" onclick="exportData()">⬇️ Exportar mis datos</button>
-    <button class="backup-btn backup-import" onclick="document.getElementById('importFile').click()">⬆️ Importar copia de seguridad</button>
-    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-    <div class="divider"></div>
-    <p style="font-family:'Josefin Sans',sans-serif;font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:8px">Zona de peligro</p>
-    <button class="backup-btn backup-danger" onclick="resetAll()">🗑️ Borrar todos los datos</button>
+
+    <div class="backup-card">
+      <h3>⬆️ Importar datos</h3>
+      <p>Recupera tus datos desde un archivo de backup anterior. Util si has borrado datos o cambias de movil.</p>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">Seleccionar archivo backup</button>
+    </div>
+
+    <div class="backup-card" style="border-color:rgba(200,50,50,.3)">
+      <h3 style="color:#e87070">🗑️ Borrar todo</h3>
+      <p>Elimina todos los vinos e historial permanentemente. Esta accion no se puede deshacer.</p>
+      <button class="btn btn-danger" onclick="resetAll()">Borrar todos los datos</button>
+    </div>
   </div>
+
+</div>
+
 <div class="modal-overlay" id="modalOverlay" onclick="bgClose(event)">
   <div class="modal"><div class="modal-handle"></div><div id="modalContent"></div></div>
 </div>
 <script>
-var SK='vinoteka_teka_v3';
+var SK='vinoteka_teka_v4';
 var TIPOS={
-  tinto:   {e:'🍷',l:'Tinto',        c:'type-tinto'},
-  blanco:  {e:'🥂',l:'Blanco',       c:'type-blanco'},
-  rosado:  {e:'🌸',l:'Rosado',       c:'type-rosado'},
-  cava:    {e:'✨',    l:'Cava/Espumoso',c:'type-cava'},
-  generoso:{e:'🌾',l:'Generoso/Dulce',c:'type-generoso'}
+  tinto:   {e:'\u{1F377}',l:'Tinto',         c:'type-tinto'},
+  blanco:  {e:'\u{1F942}',l:'Blanco',        c:'type-blanco'},
+  rosado:  {e:'\u{1F338}',l:'Rosado',        c:'type-rosado'},
+  cava:    {e:'\u2728',   l:'Cava/Espumoso', c:'type-cava'},
+  generoso:{e:'\u{1F33E}',l:'Generoso/Dulce',c:'type-generoso'}
 };
 var CY=new Date().getFullYear();
 
 var S=(function(){
   try{var v=localStorage.getItem(SK);if(v)return JSON.parse(v);}catch(e){}
-  return {wines:[],history:[],chat:[]};
+  // Try to migrate from old key
+  try{var old=localStorage.getItem('vinoteka_teka_v3');if(old){var d=JSON.parse(old);return {wines:d.wines||[],history:d.history||[]};}}catch(e){}
+  return {wines:[],history:[]};
 })();
 
 function save(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}}
-
 function slotWine(s,h){return S.wines.find(function(w){return w.slot===s+'-'+h;});}
 function freeSlot(){for(var s=0;s<5;s++)for(var h=0;h<3;h++)if(!slotWine(s,h))return s+'-'+h;return null;}
 function totalVal(){return S.wines.reduce(function(a,w){return a+(parseFloat(w.precio)||0);},0);}
@@ -238,8 +224,8 @@ function renderAlerts(){
   var html='';
   S.wines.forEach(function(w){
     var st=guardaSt(w);
-    if(st==='expired')html+='<div class="alert-card urgent"><span class="pulse">\u26A0</span><span><b>'+w.name+' '+w.anada+'</b> - Ha superado su ventana (hasta '+w.guarda_fin+'). Consumir ya!</span></div>';
-    else if(st==='urgent')html+='<div class="alert-card"><span>\u26A0</span><span><b>'+w.name+' '+w.anada+'</b> - Fin de guarda en '+w.guarda_fin+'. Momento ideal.</span></div>';
+    if(st==='expired')html+='<div class="alert-card urgent"><span class="pulse">\u26A0</span><span><b>'+esc(w.name)+' '+w.anada+'</b> - Ha superado su ventana de consumo (hasta '+w.guarda_fin+'). Consumir ya!</span></div>';
+    else if(st==='urgent')html+='<div class="alert-card"><span>\u26A0</span><span><b>'+esc(w.name)+' '+w.anada+'</b> - Fin de guarda en '+w.guarda_fin+'. Momento ideal.</span></div>';
   });
   if(S.wines.length===15)html+='<div class="alert-card"><span>!</span><span>Vinoteca <b>llena</b>. Consume o retira una botella.</span></div>';
   document.getElementById('alertsSection').innerHTML=html;
@@ -268,7 +254,10 @@ function renderShelves(){
 
 function renderHistorial(){
   var c=document.getElementById('historialContainer');
-  if(!S.history.length){c.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--text-dim)"><div style="font-size:3rem">📖</div><p style="margin-top:12px">Aun no hay catas registradas.</p></div>';return;}
+  if(!S.history.length){
+    c.innerHTML='<div style="text-align:center;padding:40px 20px;color:var(--text-dim)"><div style="font-size:3rem">\u{1F4D6}</div><p style="margin-top:12px">Aun no hay catas registradas.</p><p style="font-size:.8rem;margin-top:4px">Cuando termines una botella, registrala aqui.</p></div>';
+    return;
+  }
   var sorted=S.history.slice().sort(function(a,b){return new Date(b.fecha)-new Date(a.fecha);});
   c.innerHTML=sorted.map(function(h){
     var t=TIPOS[h.tipo]||TIPOS.tinto;
@@ -276,7 +265,7 @@ function renderHistorial(){
     return '<div class="history-card" onclick="openHistDetail(\''+ h.id +'\')" >'+
       '<div class="history-score score-'+h.nota+'">'+h.nota+'</div>'+
       '<div class="history-info"><h4>'+t.e+' '+esc(h.name)+'</h4>'+
-      '<p>'+(h.bodega||'')+' - '+(h.anada||'')+' - '+(h.fecha?h.fecha.substring(0,10):'')+'</p>'+
+      '<p>'+(h.bodega?esc(h.bodega)+' - ':'')+( h.anada||'')+' - '+(h.fecha?h.fecha.substring(0,10):'')+'</p>'+
       (h.notas_cata?'<p style="margin-top:4px;font-style:italic;font-size:.72rem">"'+esc(h.notas_cata)+'"</p>':'')+
       '</div><div class="history-price">'+(h.precio?h.precio+'\u20AC':'')+'<br><span style="font-size:.6rem;color:var(--text-dim)">'+rcp+'</span></div></div>';
   }).join('');
@@ -327,16 +316,15 @@ function openAdd(slot){
   openModal(
     '<p class="modal-title">Anadir Botella</p>'+
     '<p class="modal-subtitle">Estante '+(s+1)+', Hueco '+(h+1)+'</p>'+
-    '<div class="ai-add-note">📷 Tambien puedes ir al Sommelier y subir una foto de la etiqueta.</div>'+
-    '<div class="form-group"><label>Nombre *</label><input type="text" id="fn" placeholder="Ej: Ribera del Duero Reserva"></div>'+
-    '<div class="form-group"><label>Bodega</label><input type="text" id="fb" placeholder="Ej: Vega Sicilia"></div>'+
-    '<div class="form-row"><div class="form-group"><label>Anada</label><input type="number" id="fa" placeholder="2019"></div>'+
-    '<div class="form-group"><label>Precio (EUR)</label><input type="number" id="fp" placeholder="15.90" step="0.01"></div></div>'+
-    '<div class="form-group"><label>Tipo</label><select id="ft">'+tipoOpts('')+'</select></div>'+
-    '<div class="form-row"><div class="form-group"><label>Region / D.O.</label><input type="text" id="fr" placeholder="Ribera del Duero"></div>'+
+    '<div class="form-group"><label>Nombre *</label><input type="text" id="fn" placeholder="Ej: Azpilicueta Crianza"></div>'+
+    '<div class="form-group"><label>Bodega</label><input type="text" id="fb" placeholder="Ej: Campo Viejo"></div>'+
+    '<div class="form-row"><div class="form-group"><label>Anada</label><input type="number" id="fa" placeholder="2020"></div>'+
+    '<div class="form-group"><label>Precio (EUR)</label><input type="number" id="fp" placeholder="9.90" step="0.01"></div></div>'+
+    '<div class="form-group"><label>Tipo</label><select id="ft">'+tipoOpts('tinto')+'</select></div>'+
+    '<div class="form-row"><div class="form-group"><label>Region / D.O.</label><input type="text" id="fr" placeholder="Rioja"></div>'+
     '<div class="form-group"><label>Uva(s)</label><input type="text" id="fu" placeholder="Tempranillo"></div></div>'+
     '<div class="form-row"><div class="form-group"><label>Guarda desde</label><input type="number" id="fgi" placeholder="'+CY+'"></div>'+
-    '<div class="form-group"><label>Guarda hasta</label><input type="number" id="fgf" placeholder="'+(CY+5)+'"></div></div>'+
+    '<div class="form-group"><label>Guarda hasta</label><input type="number" id="fgf" placeholder="'+(CY+4)+'"></div></div>'+
     '<div class="form-group"><label>Notas</label><textarea id="fno" rows="2" placeholder="Notas personales..."></textarea></div>'+
     '<button class="btn btn-primary" onclick="saveWine(\''+ slot +'\')" >Guardar en Bodega</button>'+
     '<button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>'
@@ -375,7 +363,7 @@ function openDetail(wid){
     '<div class="divider"></div>'+
     '<p style="font-size:.75rem;color:var(--text-dim);margin-bottom:10px">Valoracion (0-5):</p>'+
     '<div class="rating-row">'+ratingBtns+'</div>'+
-    '<div class="form-group" style="margin-top:10px"><label>Notas de cata</label><textarea id="cataN" rows="2" placeholder="Taninos, acidez..."></textarea></div>'+
+    '<div class="form-group" style="margin-top:10px"><label>Notas de cata</label><textarea id="cataN" rows="2" placeholder="Taninos, acidez, frutosidad..."></textarea></div>'+
     '<button class="btn btn-primary" onclick="consumeWine(\''+ w.id +'\')" >Consumida - Mover a Historial</button>'+
     '<button class="btn btn-secondary" onclick="openEdit(\''+ w.id +'\')" >Editar</button>'+
     '<button class="btn btn-danger" onclick="delWine(\''+ w.id +'\')" >Eliminar de la bodega</button>'
@@ -427,7 +415,7 @@ function openHistDetail(hid){
   openModal(
     '<div class="wine-detail-img">'+t.e+'</div>'+
     '<p class="modal-title">'+esc(h.name)+'</p>'+
-    '<p class="modal-subtitle">'+(h.bodega?esc(h.bodega)+' - ':'')+( h.anada?h.anada:'')+'</p>'+
+    '<p class="modal-subtitle">'+(h.bodega?esc(h.bodega)+' - ':'')+( h.anada||'')+'</p>'+
     '<div class="detail-grid">'+
     '<div class="detail-item"><span class="dk">Nota</span><span class="dv" style="font-size:1.4rem;color:var(--gold)">'+h.nota+'/5</span></div>'+
     '<div class="detail-item"><span class="dk">Precio</span><span class="dv">'+(h.precio?h.precio+'\u20AC':'-')+'</span></div>'+
@@ -449,141 +437,9 @@ function switchTab(tab,btn){
   btn.classList.add('active');
 }
 
-// CHAT
-var QP=['Que bebo hoy?','Recomendame compras','Cual abrir ya?','Maridaje con carne','Maridaje con pescado','Vino para regalo','Temperatura de servicio','Analiza mi coleccion'];
-
-function initChat(){
-  document.getElementById('quickPrompts').innerHTML=QP.map(function(p){return '<button class="qp-btn" onclick="qpSend(this.textContent)">'+p+'</button>';}).join('');
-  if(!S.chat.length){
-    document.getElementById('chatMessages').innerHTML='<div class="msg assistant"><span class="msg-label">Sommelier Teka</span>Bienvenido a su vinoteca personal. Soy su sommelier virtual. Puedo identificar vinos por foto de etiqueta, sugerir maridajes y asesorarle en compras. En que puedo servirle?</div>';
-  }else{renderChat();}
-}
-
-function renderChat(){
-  var msgs=document.getElementById('chatMessages');
-  msgs.innerHTML=S.chat.map(function(m){
-    return m.role==='user'
-      ?'<div class="msg user">'+esc(m.content)+'</div>'
-      :'<div class="msg assistant"><span class="msg-label">Sommelier Teka</span>'+m.content.replace(/\n/g,'<br>')+'</div>';
-  }).join('');
-  msgs.scrollTop=msgs.scrollHeight;
-}
-
-function qpSend(t){document.getElementById('chatInput').value=t;sendMsg();}
-function chatKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}}
-
-function buildCtx(){
-  var inv=S.wines.length
-    ?'INVENTARIO ('+S.wines.length+' botellas):\n'+S.wines.map(function(w){var p=w.slot.split('-');return '- '+w.name+' '+(w.anada||'')+' ('+( w.bodega||'')+') | '+(TIPOS[w.tipo]?TIPOS[w.tipo].l:w.tipo)+' | '+(w.region||'')+' | '+(w.precio||'?')+'EUR | Guarda:'+(w.guarda_inicio||'?')+'-'+(w.guarda_fin||'?')+' | Estado:'+(guardaSt(w)||'?')+' | Estante '+(parseInt(p[0])+1)+' Hueco '+(parseInt(p[1])+1);}).join('\n')
-    :'INVENTARIO: Vinoteca vacia.';
-  var hist=S.history.length
-    ?'\nCATAS ('+S.history.length+'):\n'+S.history.map(function(h){return '- '+h.name+' '+(h.anada||'')+' | Nota:'+h.nota+'/5 | '+(h.precio||'?')+'EUR | RCP:'+(h.precio?(h.nota/(h.precio/10)).toFixed(2):'?')+' | '+(h.notas_cata||'');}).join('\n')
-    :'\nCATAS: Sin catas aun.';
-  return inv+hist;
-}
-
-function addLoader(msgs){
-  var d=document.createElement('div');d.className='msg assistant';
-  d.innerHTML='<span class="msg-label">Sommelier Teka</span><span class="dots"><span></span><span></span><span></span></span>';
-  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d;
-}
-
-function addAssistMsg(msgs,text){
-  var d=document.createElement('div');d.className='msg assistant';
-  d.innerHTML='<span class="msg-label">Sommelier Teka</span>'+text.replace(/\n/g,'<br>');
-  msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;
-}
-
-async function sendMsg(){
-  var input=document.getElementById('chatInput');
-  var text=input.value.trim();if(!text)return;
-  input.value='';
-  var msgs=document.getElementById('chatMessages');
-  var ud=document.createElement('div');ud.className='msg user';ud.textContent=text;msgs.appendChild(ud);
-  var ld=addLoader(msgs);
-  S.chat.push({role:'user',content:text});
-  var sys='Eres un sommelier experto de la vinoteca Teka. Estilo culto y cercano.\n\n'+buildCtx()+'\n\nMenciona siempre la posicion exacta del vino. Indica temperatura y decantacion. Alerta vinos al final de guarda. Responde en espanol.';
-  try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys,messages:S.chat.map(function(m){return{role:m.role,content:m.content};})})});
-    var d=await r.json();
-    var reply=d.content?d.content.map(function(c){return c.text||'';}).join(''):'Sin respuesta.';
-    ld.remove();addAssistMsg(msgs,reply);S.chat.push({role:'assistant',content:reply});
-    if(S.chat.length>20)S.chat=S.chat.slice(-20);
-    save();
-  }catch(err){ld.innerHTML='<span class="msg-label">Sommelier Teka</span>Error de conexion.';}
-}
-
-// FOTO ETIQUETA
-var imgB64=null,imgMime=null;
-function triggerPhoto(){document.getElementById('photoInput').click();}
-
-function handlePhoto(e){
-  var file=e.target.files[0];if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    imgB64=ev.target.result.split(',')[1];imgMime=file.type||'image/jpeg';
-    var msgs=document.getElementById('chatMessages');
-    var pd=document.createElement('div');pd.className='msg user';
-    pd.innerHTML='<img src="'+ev.target.result+'" class="photo-preview"><br><small style="color:var(--text-dim);font-size:.75rem">Analizando etiqueta...</small>';
-    msgs.appendChild(pd);msgs.scrollTop=msgs.scrollHeight;
-    analyzeLabel();
-  };
-  reader.readAsDataURL(file);e.target.value='';
-}
-
-async function analyzeLabel(){
-  var msgs=document.getElementById('chatMessages');
-  var ld=addLoader(msgs);
-  var fs=freeSlot();
-  var slotTxt=fs?'Primer hueco libre: Estante '+(parseInt(fs.split('-')[0])+1)+', Hueco '+(parseInt(fs.split('-')[1])+1)+'.':'Vinoteca llena.';
-  var sys='Eres un sommelier experto. Identifica el vino de la etiqueta y responde SIEMPRE con este formato exacto:\nNOMBRE: [nombre completo]\nBODEGA: [nombre]\nANADA: [anno o Sin anada]\nTIPO: [tinto/blanco/rosado/cava/generoso]\nUVA: [variedades]\nREGION: [denominacion]\nPRECIO: [numero en euros sin simbolo]\nGUARDA_INI: [anno inicio]\nGUARDA_FIN: [anno fin]\nCONSEJO: [temperatura y decantacion en una frase]\nDESCRIPCION: [2-3 frases sobre el vino]\n\n'+slotTxt+'\n\nResponde en espanol.';
-  try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:[{role:'user',content:[{type:'image',source:{type:'base64',media_type:imgMime,data:imgB64}},{type:'text',text:'Identifica este vino.'}]}]})});
-    var d=await r.json();
-    var reply=d.content?d.content.map(function(c){return c.text||'';}).join(''):'No pude identificar el vino.';
-    ld.remove();
-    var get=function(key){var m=reply.match(new RegExp(key+':\\s*(.+)'));return m?m[1].trim():'';};
-    var det={name:get('NOMBRE'),bodega:get('BODEGA'),anada:get('ANADA'),tipo:get('TIPO').toLowerCase(),uva:get('UVA'),region:get('REGION'),precio:get('PRECIO'),gi:get('GUARDA_INI'),gf:get('GUARDA_FIN')};
-    var d2=document.createElement('div');d2.className='msg assistant';
-    var prettyReply=reply.replace(/\n/g,'<br>');
-    var btnHtml='';
-    if(fs){
-      var slotLbl='Estante '+(parseInt(fs.split('-')[0])+1)+', Hueco '+(parseInt(fs.split('-')[1])+1);
-      var ds=encodeURIComponent(JSON.stringify(det));
-      btnHtml='<button class="btn btn-primary" style="margin-top:10px;font-size:.65rem" onclick="openAddFromPhoto(\''+ fs +'\',decodeURIComponent(\''+ ds +'\'))">Anadir a '+slotLbl+'</button>';
-    }
-    d2.innerHTML='<span class="msg-label">Sommelier Teka</span>'+prettyReply+btnHtml;
-    msgs.appendChild(d2);msgs.scrollTop=msgs.scrollHeight;
-    S.chat.push({role:'assistant',content:reply});save();
-    imgB64=null;imgMime=null;
-  }catch(err){ld.innerHTML='<span class="msg-label">Sommelier Teka</span>Error al analizar la imagen.';imgB64=null;}
-}
-
-function openAddFromPhoto(slot,detStr){
-  var det=JSON.parse(detStr);
-  var p=slot.split('-');var s=parseInt(p[0]);var h=parseInt(p[1]);
-  openModal(
-    '<p class="modal-title">Anadir Botella</p>'+
-    '<p class="modal-subtitle">Identificado por IA - Estante '+(s+1)+', Hueco '+(h+1)+'</p>'+
-    '<div class="ai-add-note">Datos extraidos automaticamente. Revisa y corrige si es necesario.</div>'+
-    '<div class="form-group"><label>Nombre *</label><input type="text" id="fn" value="'+esc(det.name||'')+'"></div>'+
-    '<div class="form-group"><label>Bodega</label><input type="text" id="fb" value="'+esc(det.bodega||'')+'"></div>'+
-    '<div class="form-row"><div class="form-group"><label>Anada</label><input type="number" id="fa" value="'+esc(det.anada||'')+'"></div>'+
-    '<div class="form-group"><label>Precio (EUR)</label><input type="number" id="fp" value="'+esc(det.precio||'')+'" step="0.01"></div></div>'+
-    '<div class="form-group"><label>Tipo</label><select id="ft">'+tipoOpts(det.tipo||'tinto')+'</select></div>'+
-    '<div class="form-row"><div class="form-group"><label>Region / D.O.</label><input type="text" id="fr" value="'+esc(det.region||'')+'"></div>'+
-    '<div class="form-group"><label>Uva(s)</label><input type="text" id="fu" value="'+esc(det.uva||'')+'"></div></div>'+
-    '<div class="form-row"><div class="form-group"><label>Guarda desde</label><input type="number" id="fgi" value="'+esc(det.gi||'')+'"></div>'+
-    '<div class="form-group"><label>Guarda hasta</label><input type="number" id="fgf" value="'+esc(det.gf||'')+'"></div></div>'+
-    '<div class="form-group"><label>Notas</label><textarea id="fno" rows="2" placeholder="Notas personales..."></textarea></div>'+
-    '<button class="btn btn-primary" onclick="saveWine(\''+ slot +'\')" >Confirmar y Guardar en Bodega</button>'+
-    '<button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>'
-  );
-}
-
-
+// BACKUP
 function exportData(){
-  var data={wines:S.wines,history:S.history,exportDate:new Date().toISOString(),version:'1'};
+  var data={wines:S.wines,history:S.history,exportDate:new Date().toISOString(),version:'2'};
   var json=JSON.stringify(data,null,2);
   var blob=new Blob([json],{type:'application/json'});
   var url=URL.createObjectURL(blob);
@@ -592,7 +448,7 @@ function exportData(){
   a.download='vinoteca_backup_'+new Date().toISOString().substring(0,10)+'.json';
   document.body.appendChild(a);a.click();document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  alert('Backup exportado correctamente. Guardalo en un lugar seguro.');
+  alert('Backup exportado: '+S.wines.length+' botellas y '+S.history.length+' catas guardadas.');
 }
 
 function importData(e){
@@ -601,28 +457,103 @@ function importData(e){
   reader.onload=function(ev){
     try{
       var data=JSON.parse(ev.target.result);
-      if(!data.wines||!data.history){alert('Archivo no valido.');return;}
-      if(!confirm('Esto reemplazara todos tus datos actuales. Continuar?'))return;
+      if(!data.wines&&!data.history){alert('Archivo no valido. Asegurate de usar un backup de Vinoteca Teka.');return;}
+      if(!confirm('Esto reemplazara todos tus datos actuales por los del backup.\n\nBackup contiene: '+( data.wines?data.wines.length:0)+' botellas y '+(data.history?data.history.length:0)+' catas.\n\nContinuar?'))return;
       S.wines=data.wines||[];
       S.history=data.history||[];
       save();render();
-      alert('Datos importados correctamente. Tienes '+S.wines.length+' botellas y '+S.history.length+' catas.');
-    }catch(err){alert('Error al leer el archivo. Asegurate de que es un backup valido.');}
+      alert('Datos importados correctamente.\n'+S.wines.length+' botellas y '+S.history.length+' catas restauradas.');
+    }catch(err){alert('Error al leer el archivo. Asegurate de que es un backup valido de Vinoteca Teka.');}
   };
   reader.readAsText(file);
   e.target.value='';
 }
 
 function resetAll(){
-  if(!confirm('ATENCION: Esto borrara TODOS tus vinos, historial y datos. Esta accion no se puede deshacer.'))return;
-  if(!confirm('Seguro? Se perderan todos los datos permanentemente.'))return;
-  S={wines:[],history:[],chat:[]};
-  save();render();initChat();
+  if(!confirm('ATENCION: Esto borrara TODOS tus vinos e historial permanentemente.\nEsta accion NO se puede deshacer.\n\nTe recomiendo exportar un backup primero.'))return;
+  if(!confirm('Ultima confirmacion: seguro que quieres borrar todo?'))return;
+  S={wines:[],history:[]};
+  save();render();
   alert('Todos los datos han sido borrados.');
 }
 
+
+function openIA(){
+  if(!S.wines.length){alert('No tienes vinos en la vinoteca todavia.');return;}
+  var CY=new Date().getFullYear();
+  var lines=[];
+  lines.push('=== MI VINOTECA TEKA ===');
+  lines.push('Fecha: '+new Date().toLocaleDateString('es-ES'));
+  lines.push('Total botellas: '+S.wines.length+' de 15 huecos');
+  lines.push('Valor estimado: '+S.wines.reduce(function(a,w){return a+(parseFloat(w.precio)||0);},0).toFixed(2)+' EUR');
+  lines.push('');
+  lines.push('--- INVENTARIO ACTUAL ---');
+  var TMAP={tinto:'Tinto',blanco:'Blanco',rosado:'Rosado',cava:'Cava/Espumoso',generoso:'Generoso/Dulce'};
+  S.wines.forEach(function(w,i){
+    var p=w.slot.split('-');
+    var st='';
+    if(w.guarda_fin){
+      if(CY>w.guarda_fin)st='FUERA DE VENTANA';
+      else if(CY>=w.guarda_fin-1)st='BEBER YA';
+      else if(!w.guarda_inicio||CY>=w.guarda_inicio)st='VENTANA OPTIMA';
+      else st='EN GUARDA';
+    }
+    lines.push((i+1)+'. '+w.name+(w.anada?' '+w.anada:''));
+    lines.push('   Bodega: '+(w.bodega||'N/D'));
+    lines.push('   Tipo: '+(TMAP[w.tipo]||w.tipo));
+    lines.push('   Region/DO: '+(w.region||'N/D'));
+    lines.push('   Uva: '+(w.uva||'N/D'));
+    lines.push('   Precio: '+(w.precio?w.precio+' EUR':'N/D'));
+    lines.push('   Guarda: '+(w.guarda_inicio||'?')+' - '+(w.guarda_fin||'?')+(st?' ['+st+']':''));
+    lines.push('   Posicion: Estante '+(parseInt(p[0])+1)+', Hueco '+(parseInt(p[1])+1));
+    if(w.notas)lines.push('   Notas: '+w.notas);
+    lines.push('');
+  });
+  if(S.history.length){
+    lines.push('--- MIS GUSTOS (historial de catas) ---');
+    var sorted=S.history.slice().sort(function(a,b){return b.nota-a.nota;});
+    sorted.forEach(function(h){
+      lines.push('- '+h.name+(h.anada?' '+h.anada:'')+' | Nota: '+h.nota+'/5'+(h.precio?' | '+h.precio+' EUR | RCP: '+(h.nota/(h.precio/10)).toFixed(1):''+(h.notas_cata?' | "'+h.notas_cata+'"':'')));
+    });
+    lines.push('');
+  }
+  lines.push('--- PREGUNTA SUGERIDA ---');
+  lines.push('Con esta informacion, ayudame a:');
+  lines.push('1. Que botella deberia abrir esta semana?');
+  lines.push('2. Hay alguna botella que deba consumir urgentemente?');
+  lines.push('3. Que maridaje recomiendas para [pon aqui tu menu]?');
+  lines.push('4. Que vinos me recomiendas comprar segun mis gustos?');
+
+  var texto=lines.join('\n');
+
+  openModal(
+    '<p class="modal-title">🤖 Exportar para IA</p>'+
+    '<p class="modal-subtitle" style="margin-bottom:14px">Copia este texto y pegalo en ChatGPT, Gemini, Claude o cualquier IA</p>'+
+    '<div class="ia-modal-box">'+
+    '<textarea class="ia-text" id="iaText" readonly>'+texto+'</textarea>'+
+    '<div class="copy-feedback" id="copyFeedback"></div>'+
+    '</div>'+
+    '<button class="btn btn-primary" onclick="copyIA()">📋 Copiar al portapapeles</button>'+
+    '<button class="btn btn-secondary" onclick="closeModal()">Cerrar</button>'
+  );
+}
+
+function copyIA(){
+  var t=document.getElementById('iaText');
+  try{
+    navigator.clipboard.writeText(t.value).then(function(){
+      var fb=document.getElementById('copyFeedback');
+      fb.textContent='Copiado correctamente';
+      setTimeout(function(){fb.textContent='';},2500);
+    });
+  }catch(e){
+    t.select();document.execCommand('copy');
+    var fb=document.getElementById('copyFeedback');
+    fb.textContent='Copiado correctamente';
+    setTimeout(function(){fb.textContent='';},2500);
+  }
+}
 render();
-initChat();
 </script>
 </body>
 </html>
